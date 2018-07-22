@@ -1,0 +1,174 @@
+{% extends 'tms/tms.html' %}
+
+{% block content_title %}
+    <a href="#">
+        <i class="fa fa-clock-o"></i>
+        TMS Overview
+    </a>
+{% endblock %}
+
+{% block content %}
+
+    <div class="admin-panel p-a-xs m-y">
+        <div class="admin-panel-heading p-b-xs m-b-xs">
+            TMS Calendar
+        </div>
+        <div class="admin-panel-body">
+            <div class="row">
+                <div class="col-md-9">
+
+                    <div class="tms-calendar m-x">
+                        <div id="timeUsageCalendar"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <p class="m-t small">
+                        今天已经工作了 <span style="font-weight: bold">{{ today_work_time }}</span> 小时，学习了 <span style="font-weight: bold">{{ today_study_time }}</span> 小时。
+                    </p>
+                    <p style="font-size: 30%; color: grey">
+                        最近在做 <span style="font-weight: bold">{{ latest_clock_item.project }}</span> 项目的 <span style="font-weight: bold">{{ latest_clock_item.thing }}</span>
+                         〖{{ latest_clock_item.start_time|date:'H:i' }} - {{ latest_clock_item.end_time|date:'H:i' }}〗
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="admin-panel p-a-xs m-y">
+        <div class="admin-panel-heading p-b-xs m-b-xs">
+            本年各月简报
+            <div class="pull-right" style="font-size: 30%; margin-top: 8px; color: grey">生成时间：{{ cur_dt|date:'Y-m-d H:i:s' }}</div>
+        </div>
+        <div class="admin-panel-body">
+            <table class="admin-table">
+                <tr>
+                    <th>月份</th>
+                    {% for month_stats in months_stats %}
+                        {% if month_stats.month == cur_month %}
+                            <th style="color: red">{{ month_stats.month_str }}</th>
+                        {% else %}
+                            <th>{{ month_stats.month_str }}</th>
+                        {% endif %}
+                    {% endfor %}
+
+                </tr>
+                <tr>
+                    <th>持续天数</th>
+                    {% for month_stats in months_stats %}
+                        {% if month_stats.month == cur_month %}
+                            <td style="color: red">{{ month_stats.days_num }}</td>
+                        {% else %}
+                            <td>{{ month_stats.days_num }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>总有效时间</th>
+                    {% for month_stats in months_stats %}
+                        {% if month_stats.month == cur_month %}
+                            <td style="color: red">{{ month_stats.valid_time }}</td>
+                        {% else %}
+                            <td>{{ month_stats.valid_time }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>日均有效时间</th>
+                    {% for month_stats in months_stats %}
+                        {% if month_stats.month == cur_month %}
+                            <td style="color: red">{{ month_stats.avg_valid_time }}</td>
+                        {% else %}
+                            <td>{{ month_stats.avg_valid_time }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="admin-panel p-a-xs m-y">
+        <div class="admin-panel-heading p-b-xs m-b-xs">
+            各年简报
+        </div>
+        <div class="admin-panel-body">
+            <table class="admin-table">
+                <tr>
+                    <th>年份</th>
+                    <th>持续天数</th>
+                    <th>日均有效时间</th>
+                    <th>总有效时间</th>
+                    <th>总工作时间</th>
+                    <th>总学习时间</th>
+                    <th>总时间</th>
+                    <th></th>
+                </tr>
+                {% for year_stats in years_stats %}
+                    <tr>
+                        <th>{{ year_stats.year }}</th>
+                        <td>{{ year_stats.days_num }}</td>
+                        <td>{{ year_stats.avg_valid_time }}</td>
+                        <td>{{ year_stats.valid_time }}</td>
+                        <td>{{ year_stats.work_time }}</td>
+                        <td>{{ year_stats.study_time }}</td>
+                        <td>{{ year_stats.all_time }}</td>
+                        <td>
+                            <span>
+                                <a href="{% url 'tms:year_report' %}?year={{ year_stats.year }}" class="extra-info" target="_blank">
+                                    <i class="fa fa-link"></i>
+                                </a>
+                            </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+
+    <script>
+        $(document).ready(function() {
+            renderTmsCalendar();
+        });
+        function renderTmsCalendar() {
+            var cal = new CalHeatMap();
+            var range = 8;
+            var startDate = moment().subtract(range - 1, 'month').toDate();
+            cal.init({
+                itemSelector: "#timeUsageCalendar",
+                itemName: ["分钟", "分钟"],
+                domain: "month",
+                start: startDate,
+                subDomain: "day",
+                range: range,
+                cellSize: 16,
+                domainLabelFormat: "%b-%Y",
+                subDomainTitleFormat: {
+                    empty: "{date} <br> 本日无用时记录",
+                    filled: "{date} <br> 用时 {count} {name}"
+                },
+                subDomainTextFormat: "%d",
+                subDomainDateFormat: "%Y-%m-%d, %a",
+                label: {
+                    position: "top"
+                },
+                highlight: ["now"],
+                data: "/tms/static/static/data/latest_time_usage.json",
+                tooltip: true,
+                legend: [120, 300, 600, 9999],
+                onClick: function(date, nb) {
+                    var dateStr = moment(date).format('YYYY-MM-DD');
+                    var url = "{% url 'tms:day_report' %}";
+                    url += '?date=' + dateStr;
+                    window.open(url);
+                }
+            });
+        }
+    </script>
+
+{% endblock %}

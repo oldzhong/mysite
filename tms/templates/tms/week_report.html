@@ -1,0 +1,50 @@
+{% extends 'tms/tms.html' %}
+
+{% block content_title %}
+    <a href="#">
+        <i class="fa fa-file-text-o"></i>
+        我的周报
+    </a>
+{% endblock %}
+
+{% block content %}
+    <div class="report-wrapper">
+        <div class="report-content m-t-md">
+            <div class="report-header">
+                <div class="report-control">
+                    <a class="control-arrow" href="{% url 'tms:week_report' %}?year={{ iso_year_of_prev_week }}&week={{ prev_week }}"><i class="fa fa-angle-left"></i></a>
+                <span class="report-date">{{ iso_year }}年第{{ week }}周
+                    {% if is_cur_week %}
+                        <small>(本周)</small>
+                    {% endif %}
+                </span>
+                    <a class="control-arrow" {% if not is_cur_week %}href="{% url 'tms:week_report' %}?year={{ iso_year_of_next_week }}&week={{ next_week }}" {% endif %}><i class="fa fa-angle-right"></i></a>
+                </div>
+            </div>
+            <div class="m-y-lg">
+                {% include '_partials/report.html' with report_data=report_data %}
+            </div>
+        </div>
+        <div class="report-aside">
+        </div>
+    </div>
+
+    <div class="m-r">
+        {% include '_partials/days_stats_table.html' with days_stats=days_stats %}
+    </div>
+
+    <h2><small>计时项列表</small></h2>
+    <div class="m-x">
+        {% for clock_items_of_day in clock_items_list %}
+            {% include '_partials/clock_items_list.html' with clock_items=clock_items_of_day.clock_items date=clock_items_of_day.date %}
+        {% endfor %}
+
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+
+{% endblock %}
