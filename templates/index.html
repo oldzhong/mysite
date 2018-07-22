@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+    {{ super() }}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="/static/node_modules/d3/d3.min.js"></script>
+    <script src="/static/node_modules/cal-heatmap/cal-heatmap.min.js"></script>
+    <script src="/static/js/tms_calendar.js"></script>
+    <script>
+        renderTmsCalendar();
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="tms-calendar">
+        <div id="timeUsageCalendar"></div>
+        <div id="timeUsageOneDay" class="m-t"></div>
+    </div>
+
+    {% for event in events %}
+        <p><a href="{{ item_url(event) }}">{{ event.title }}</a> » {{ item_datetime(event) }}</p>
+        <blockquote>{{ event.summary }}</blockquote>
+    {% endfor %}
+{% endblock %}
+
+{% block aside %}
+
+{#    <div class="panel panel-default">#}
+{#        <div class="panel-body">#}
+{#            <h5 class="m-t-0">Latest Articles</h5>#}
+{#            <ul style="list-style: none; padding-left: 0;">#}
+{#                {% for it in blog_items %}#}
+{#                    <li><a href="{{ item_url(it) }}">{{ it.title }}</a></li>#}
+{#                {% endfor %}#}
+{#            </ul>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <div class="panel panel-default">#}
+{#        <div class="panel-body">#}
+{#            <h5 class="m-t-0">Yearly Archives<small> · <a href="">more</a></small></h5>#}
+{#            <ul style="list-style: none; padding-left: 0;">#}
+{#                {% for year, items_of_year in items_group_by_year %}#}
+{#                    <li><a href="/archives/#{{ year }}">{{ year }}({{ items_of_year|length }})</a></li>#}
+{#                {% endfor %}#}
+{#            </ul>#}
+{#        </div>#}
+{#    </div>#}
+{% endblock %}

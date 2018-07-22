@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <div class="container m-t-lg">
+        <div class="row">
+{#            <div class="col-md-2"></div>#}
+            <div class="col-md-8">
+                <h1>{{ item.title }}</h1>
+                {{ item.output }}
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+{#    <script type="text/javascript" charset="utf-8">#}
+{#        $('#toc').affix({#}
+{#            offset: {#}
+{#                top: $('#toc').offset().top,#}
+{#                bottom: ($('#footer').outerHeight(true))#}
+{#            }#}
+{#        });#}
+{#    </script>#}
+{% endblock %}

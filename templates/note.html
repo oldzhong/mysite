@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block body_tag %}
+    <body class="note">
+{% endblock %}
+
+{% block main %}
+    <div>
+        <div class="container m-t-lg">
+            <div class="row ">
+                <div class="col-md-9 note-content-wrap">
+                    <h1>{{ item.title }}</h1>
+                    {{ item.output }}
+
+                    {{ macros.render_item_events(item) }}
+                </div>
+                <div class="col-md-3">
+                    <div id="toc">
+{#                        <div class="sidebar-toc">#}
+{#                            <h2>目录 | 锚点</h2>#}
+                            {{ item.toc }}
+{#                        </div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $('#toc').affix({
+                offset: {
+                    top: $('#toc').offset().top,
+                    bottom: ($('#footer').outerHeight(true))
+                }
+            });
+            $('body').scrollspy({ target: '#toc' });
+        });
+    </script>
+{% endblock %}
