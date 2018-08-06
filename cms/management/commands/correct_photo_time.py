@@ -21,7 +21,7 @@ class Command(BaseCommand):
         # photos_dir = '/Users/elvestar/Downloads/照片导出/WOW截图/'
         # photos_dir = '/Users/elvestar/Downloads/照片导出/FF10截图'
         # photos_dir = '/Users/elvestar/Downloads/照片导出/iqiyi_jietu'
-        photos_dir = '/Users/elvestar/Pictures/华为导出'
+        photos_dir = '/Users/zy/Pictures/HuaweiMate10ScreenshotExport/'
         for f in listdir(photos_dir):
             self.correct_huawei_screenshot_time(photos_dir, f)
 
