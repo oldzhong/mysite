@@ -17,8 +17,8 @@ class Command(BaseCommand):
         parser.add_argument('uri', type=str)
 
     def handle(self, *args, **options):
-        root_path = '/Users/elvestar/github/elvestar/msv4/content/'
-        imgs_root_dir = '/Users/elvestar/github/elvestar/msv4/content/static/imgs/'
+        root_path = '/Users/zy/github/elvestar/msv4/content/'
+        imgs_root_dir = '/Users/zy/github/elvestar/msv4/content/static/imgs/'
         uri = options['uri']
         imgs_dir = os.path.join(imgs_root_dir, uri.split('/')[-1])
         org_file_path = os.path.join(root_path, uri + '.org')

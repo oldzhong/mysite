@@ -23,10 +23,12 @@ class Command(BaseCommand):
         logging.warning('Success to delete all clock items')
         agenda_file_paths = ['/Users/zy/github/elvestar/msv4/time/time.org']
         agenda_file_paths.extend([
+            '/Users/zy/github/elvestar/msv4/time/home.org',
             '/Users/zy/github/elvestar/msv4/time/2015.org',
             '/Users/zy/github/elvestar/msv4/time/2016.org',
             '/Users/zy/github/elvestar/msv4/time/2017.org',
             '/Users/zy/github/elvestar/msv4/time/2018.org',
+            '/Users/zy/github/elvestar/msv4/time/2019.org',
         ])
         process_org_agenda(agenda_file_paths)
         export_time_usage()

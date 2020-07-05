@@ -521,6 +521,7 @@ def generate_report(clock_items, days_num):
         category_data['pct'] = "{0:.1f}%".format(float(category_data['cost'])/minutes_of_days * 100)
         category_time_cost = category_data['cost']
         for project_data in category_data['projects']:
+            print(u'' + category_data['name'], category_time_cost)
             project_data['pct'] = "{0:.1f}%".format(float(project_data['cost'])/category_time_cost * 100)
 
     # Sort

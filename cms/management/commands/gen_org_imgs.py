@@ -27,5 +27,5 @@ class Command(BaseCommand):
                 logging.warning('Not file: %s' % f)
                 continue
             image_path = '../static/imgs/%s/%s' % (uri, f)
-            print('#+CAPTION: %s' % image_path)
+            print('#+CAPTION: %s' % f)
             print('[[%s]]' % image_path)
